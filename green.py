@@ -194,19 +194,19 @@ def drawGreen( n, Q = lambda z: 0*z, K = regionPoints(), show = True ):
 	minIm = Points.imag.min()
 	maxIm = Points.imag.max()
 
-	reMargin = (maxRe - minRe) * 1.5
-	imMargin = (maxIm - minIm) * 1.5
+	minmin = min(minRe,minIm)
+	maxmax = max(maxRe,maxIm)
+	width = maxmax - minmin
 
-	minRe -= reMargin
-	maxRe += reMargin
-	minIm -= imMargin
-	maxIm += imMargin
+	minmin = minmin - 0.5*width
+	maxmax = maxmax + 0.5*width
 
 	N = 100
 
-	xx = np.linspace(minRe,maxRe,N+1)
-	yy = np.linspace(minIm,maxIm,N+1)
-	Re, Im = np.meshgrid(xx,yy)
+	xx = np.linspace( minmin, maxmax, N + 1 )
+	yy = np.linspace( minmin, maxmax, N + 1 )
+
+	Re, Im = np.meshgrid( xx, yy )
 	Z = Re + Im*1j
 	
 	green = Green( Z, n, Q, K )
@@ -238,7 +238,7 @@ def GreenEll( z, a, b ):
 def main():
 
 	# Max degree of polynomials
-	n = 100
+	n = 50
 
 	# Lower left corner and width of square S
 	corner = - 5 - 5j
@@ -246,7 +246,7 @@ def main():
 
 	# z is in K iff z is in S and condition(z) == 1/True
 	a = 1.
-	b = 1.5
+	b = 2.
 	condition = lambda z: (z.real/a)**2 + (z.imag/b)**2 < 1
 	
 	K = regionPoints( corner, width, condition, 100 )
@@ -256,8 +256,11 @@ def main():
 	drawGreen( n, Q, K, show = False )
 
 
-	xx = np.linspace(-2,2,51)
-	yy = np.linspace(-2,2,51)
+
+	# Draw exact solution for ellipse region.
+
+	xx = np.linspace(-4,4,101)
+	yy = np.linspace(-4,4,101)
 	Re, Im = np.meshgrid(xx,yy)
 	Z = Re + Im*1j
 	
