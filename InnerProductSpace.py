@@ -149,9 +149,6 @@ class InnerProductSpace:
 
 		'''
 
-		if not self.contains( u ):
-			u = self.cast( u )
-
 		return np.sqrt( self.inProd( u, u ) ).real
 
 
@@ -198,14 +195,10 @@ class InnerProductSpace:
 
 
 		if not self.contains( u ):
-			u = self.cast( u )
+		 	u = self.cast( u )
 
 
-		if not self.contains( v ):
-			v = self.cast( v )
-
-
-		scale = self.inProd( u, u )
+		scale = self.inProd( u, u ).real
 
 
 		if scale == 0:
@@ -254,6 +247,8 @@ class InnerProductSpace:
 
 
 
+# Sample inner product
+
 def polyProduct( u, v ):
 	'''
 
@@ -282,10 +277,18 @@ def polyProduct( u, v ):
 
 
 
+
 def main():
 
 	V = InnerProductSpace( 3, polyProduct )
+	
 	B = V.GramSchmidt()
+
+	u = [3,2,1]
+	v = (0,1,2)
+
+	w = V.proj(v,u)
+
 
 	print InnerProductSpace.__doc__
 
